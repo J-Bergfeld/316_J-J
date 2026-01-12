@@ -1,3 +1,14 @@
+/**
+  ******************************************************************************
+  * @file      main.c
+  * @author    Jack and Jack
+  * @brief     Programs the STM32L476xx device to repeatedly counts 0 to 7,
+  * 		   outputting the count to the 3 LEDs if PA4 is pulled low. Do
+  * 		   nothing if PA4 is pulled high
+
+  ******************************************************************************
+  */
+
 #include "main.h"
 
 int main(void)
