@@ -1,1 +1,1 @@
-Each A# is a lab for the class, split into branches the base settup was given and our IDE is STM32CubeIDE. For each lab I am just uploading the files that either get changed or added to the original blink_button project we were given.
+Each A# is a lab for the class, split into folders the base settup was given and our IDE is STM32CubeIDE. For each lab I am just uploading the files that either get changed or added to the original blink_button project we were given.
