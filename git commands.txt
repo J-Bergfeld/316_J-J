@@ -1,0 +1,5 @@
+git add .; git commit -m "commit message" 
+git pull --rebase		  #replaces local with main
+
+git pull --ff-only        # Only works if your life is easy; fail if a merge is required
+
