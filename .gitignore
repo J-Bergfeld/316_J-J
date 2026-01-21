@@ -1,0 +1,69 @@
+# ===== OS =====
+.DS_Store
+Thumbs.db
+
+# ===== Editors / IDEs =====
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# ===== Build directories =====
+build/
+cmake-build-*/
+out/
+bin/
+obj/
+
+# ===== CMake =====
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+CTestTestfile.cmake
+compile_commands.json
+
+# ===== Make =====
+Makefile
+*.mk
+
+# ===== Object / Binary files =====
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.dll
+*.dylib
+*.exe
+*.out
+*.bat
+
+# ===== Precompiled headers =====
+*.gch
+*.pch
+
+# ===== Debug / profiling =====
+*.dSYM/
+*.su
+*.idb
+*.pdb
+*.prof
+gmon.out
+
+# ===== Dependency files =====
+*.d
+
+# ===== Autotools =====
+autom4te.cache/
+aclocal.m4
+config.log
+config.status
+configure
+libtool
+
+# ===== Coverage =====
+*.gcno
+*.gcda
+*.gcov
