@@ -30,9 +30,6 @@ void DAC_init(void)
     SPI3->CR1 |= SPI_CR1_MSTR;
     SPI3->CR1 |= SPI_CR1_SSM | SPI_CR1_SSI;
     SPI3->CR1 |= SPI_CR1_BR_0; // fPCLK/4 (safe starting point)
-    //SPI3->CR1 &= ~SPI_CR1_BR;                 // NEW: clear baud rate bits
-    //SPI3->CR1 |=  SPI_CR1_BR_0;               // NEW: BR=010 => fPCLK/8 (more margin than /4)
-
 
     SPI3->CR2 = 0;
     SPI3->CR2 |= (SPI_CR2_DS_3 | SPI_CR2_DS_2 | SPI_CR2_DS_1 | SPI_CR2_DS_0); // 16-bit

@@ -21,6 +21,7 @@ void wavegen_set_waveform(Waveform w)
     g_idx = 0;
 }
 
+
 void wavegen_set_frequency_hz(uint32_t hz)
 {
     g_freq_hz = hz;
