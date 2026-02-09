@@ -6,9 +6,6 @@
 #include "wavegen.h"
 #include "tim2_waveout.h"
 
-#define STAR  (10)
-#define POUND (11)
-
 static void apply_key(int16_t k)
 {
     if (k >= 1 && k <= 5) {
@@ -24,13 +21,13 @@ static void apply_key(int16_t k)
     if (k == 9) { wavegen_set_waveform(WAVE_SQUARE);   return; }
 
     if (wavegen_get_waveform() == WAVE_SQUARE) {
-        if (k == STAR) {
+        if (k == 10) {
             uint8_t d = wavegen_get_duty();
-            d = (d > 10U) ? (uint8_t)(d - 10U) : 10U;
+            d = d-10u;
             wavegen_set_duty(d);
-        } else if (k == POUND) {
+        } else if (k == 11) {
             uint8_t d = wavegen_get_duty();
-            d = (d < 90U) ? (uint8_t)(d + 10U) : 90U;
+            d = d+10u;
             wavegen_set_duty(d);
         } else if (k == 0) {
             wavegen_set_duty(50U);
