@@ -47,103 +47,93 @@ static const uint8_t row_pin[NUM_ROWS] = { 0u, 1u, 2u, 7u };
 #define KEY_NONE                ((int16_t)-1)
 
 // Key codes for [row][col]
-static const int16_t keymap[NUM_ROWS][NUM_COLS] = {
-    {  1,  2,  3 },
-    {  4,  5,  6 },
-    {  7,  8,  9 },
-    { 10,  0, 11 }
-};
+static const int16_t keymap[NUM_ROWS][NUM_COLS] = { { 1, 2, 3 }, { 4, 5, 6 }, {
+		7, 8, 9 }, { 10, 0, 11 } };
 
-static void delay_cycles(uint32_t cycles)
-{
-    volatile uint32_t idx = 0u;
+static void delay_cycles(uint32_t cycles) {
+	volatile uint32_t idx = 0u;
 
-    for (idx = 0u; idx < cycles; idx++) {
-        __NOP();
-    }
+	for (idx = 0u; idx < cycles; idx++) {
+		__NOP();
+	}
 }
 
-static void cols_all_low(void)
-{
-    // Reset PB4..PB6 (atomic)
-    COL_PORT->BSRR = (COL_MASK << 16);
+static void cols_all_low(void) {
+	// Reset PB4..PB6 (atomic)
+	COL_PORT->BSRR = (COL_MASK << 16);
 }
 
-static void cols_all_high(void)
-{
-    // Set PB4..PB6 (atomic)
-    COL_PORT->BSRR = COL_MASK;
+static void cols_all_high(void) {
+	// Set PB4..PB6 (atomic)
+	COL_PORT->BSRR = COL_MASK;
 }
 
-static void col_one_high(uint8_t col_idx)
-{
-    cols_all_low();
-    COL_PORT->BSRR = (1u << (COL_OFFSET + col_idx));
+static void col_one_high(uint8_t col_idx) {
+	cols_all_low();
+	COL_PORT->BSRR = (1u << (COL_OFFSET + col_idx));
 }
 
-void keypad_init(void)
-{
-    uint32_t idx = 0u;
-    uint32_t pin = 0u;
+void keypad_init(void) {
+	uint32_t idx = 0u;
+	uint32_t pin = 0u;
 
-    RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
+	RCC->AHB2ENR |= RCC_AHB2ENR_GPIOBEN;
 
-    // Configure row pins as input with pull-down.
-    for (idx = 0u; idx < NUM_ROWS; idx++) {
-        pin = (uint32_t)row_pin[idx];
+	// Configure row pins as input with pull-down.
+	for (idx = 0u; idx < NUM_ROWS; idx++) {
+		pin = (uint32_t) row_pin[idx];
 
-        ROW_PORT->MODER &= ~(3u << (2u * pin));     // input
-        ROW_PORT->PUPDR &= ~(3u << (2u * pin));
-        ROW_PORT->PUPDR |=  (2u << (2u * pin));     // pull-down
-    }
+		ROW_PORT->MODER &= ~(3u << (2u * pin));     // input
+		ROW_PORT->PUPDR &= ~(3u << (2u * pin));
+		ROW_PORT->PUPDR |= (2u << (2u * pin));     // pull-down
+	}
 
-    // Configure column pins as push-pull outputs, low speed, no pull.
-    for (idx = 0u; idx < NUM_COLS; idx++) {
-        pin = (uint32_t)COL_OFFSET + idx;
+	// Configure column pins as push-pull outputs, low speed, no pull.
+	for (idx = 0u; idx < NUM_COLS; idx++) {
+		pin = (uint32_t) COL_OFFSET + idx;
 
-        COL_PORT->MODER &= ~(3u << (2u * pin));
-        COL_PORT->MODER |=  (1u << (2u * pin));     // output
+		COL_PORT->MODER &= ~(3u << (2u * pin));
+		COL_PORT->MODER |= (1u << (2u * pin));     // output
 
-        COL_PORT->OTYPER  &= ~(1u << pin);          // push-pull
-        COL_PORT->OSPEEDR &= ~(3u << (2u * pin));   // low speed
-        COL_PORT->PUPDR   &= ~(3u << (2u * pin));   // no pull
-    }
+		COL_PORT->OTYPER &= ~(1u << pin);          // push-pull
+		COL_PORT->OSPEEDR &= ~(3u << (2u * pin));   // low speed
+		COL_PORT->PUPDR &= ~(3u << (2u * pin));   // no pull
+	}
 
-    cols_all_low();
+	cols_all_low();
 }
 
-int16_t keypad_getkey(void)
-{
-    uint32_t rows = 0u;
-    uint32_t r = 0u;
-    uint32_t c = 0u;
+int16_t keypad_getkey(void) {
+	uint32_t rows = 0u;
+	uint32_t r = 0u;
+	uint32_t c = 0u;
 
-    // Stage 1: detect any key press (any row high with all cols high).
-    cols_all_high();
-    delay_cycles(COL_SETTLE_DELAY_CYC);
+	// Stage 1: detect any key press (any row high with all cols high).
+	cols_all_high();
+	delay_cycles(COL_SETTLE_DELAY_CYC);
 
-    rows = ROW_PORT->IDR & ROW_PINS_MASK;
-    if (rows == 0u) {
-        cols_all_low();
-        return KEY_NONE;
-    }
+	rows = ROW_PORT->IDR & ROW_PINS_MASK;
+	if (rows == 0u) {
+		cols_all_low();
+		return KEY_NONE;
+	}
 
-    // Stage 2: identify key by scanning each column.
-    for (c = 0u; c < NUM_COLS; c++) {
-        col_one_high((uint8_t)c);
-        delay_cycles(COL_SETTLE_DELAY_CYC);
+	// Stage 2: identify key by scanning each column.
+	for (c = 0u; c < NUM_COLS; c++) {
+		col_one_high((uint8_t) c);
+		delay_cycles(COL_SETTLE_DELAY_CYC);
 
-        rows = ROW_PORT->IDR & ROW_PINS_MASK;
-        if (rows != 0u) {
-            for (r = 0u; r < NUM_ROWS; r++) {
-                if ((rows & (1u << row_pin[r])) != 0u) {
-                    cols_all_low();
-                    return keymap[r][c];
-                }
-            }
-        }
-    }
+		rows = ROW_PORT->IDR & ROW_PINS_MASK;
+		if (rows != 0u) {
+			for (r = 0u; r < NUM_ROWS; r++) {
+				if ((rows & (1u << row_pin[r])) != 0u) {
+					cols_all_low();
+					return keymap[r][c];
+				}
+			}
+		}
+	}
 
-    cols_all_low();
-    return KEY_NONE;
+	cols_all_low();
+	return KEY_NONE;
 }

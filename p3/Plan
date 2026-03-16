@@ -1,0 +1,27 @@
+Keypad: 
+
+6. The keypad buttons 1-5 will set the waveform frequency in 100 Hz increments (1 for 100 Hz, 2 for 200 Hz, etc). 
+
+7. The keypad buttons 6, 7, 8, and 9 will change the output waveform. a. The 6 key will change the output to a sine waveform b. The 7 key will change the output to a triangle waveform c. The 8 key will change the output to a sawtooth waveform d. The 9 key will change the output to a square waveform 
+
+
+DAC:
+1. The function generator shall use a microcontroller with an external DAC, and the DAC will be implemented as a separate library (Header / Source files as shown in Technical Note 3 ) 
+2. The function generator will be capable of producing 
+a. A square wave with a variable duty cycle 
+b. A sinusoidal waveform 
+c. A sawtooth (ramp) waveform 
+d. A triangle waveform
+
+3. All waveforms will have a Vpp of 3.0 V and be DC-biased at 1.5 V. 
+
+Timers and Interupts:
+
+4. All waveforms will have adjustable frequencies: a. 100 Hz, 200 Hz, 300 Hz, 400 Hz, 500 Hz b. The frequency of the waveforms should be within 2.5 Hz of these frequencies for full-credit.
+
+5. Upon power-up, the function generator will display a 100 Hz square wave with 50% duty cycle. 
+
+8. The keypad buttons ✱, 0, and # will change the duty cycle of the square wave. a. The ✱ key will decrease the duty cycle by 10% down to a minimum of 10%. b. The # key will increase the duty cycle by 10% up to a maximum of 90% c. The 0 key will reset the duty cycle to 50% d. The keys ✱, 0, and # will not affect the sine, sawtooth, or triangle waveforms. 
+
+
+SPI:
